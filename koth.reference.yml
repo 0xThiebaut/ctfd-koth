@@ -1,0 +1,29 @@
+api:
+  # The session's value can be found in your cookies once you are logged in on CTFd.
+  session: "12345678-1234-1234-1234-1234567890ab.1234567890a-1234567890abcde"
+  # The CSRF can be fond in the "CSRF-Token" of send headers to the API.
+  # TODO: This is why we really need API tokens
+  csrf: "1234567890abcdef1234567890abcdef1234567890abcdef12345678890abcde"
+  # The URL points to your CTFd API endpoint.
+  url: "https://foobar.ctfd.io/api/v1/"
+flags:
+  # The interval defines how often the binary should check the flag.
+  # It is more accurate to have a low interval (i.e. 10s) with few points than a high interval with lots of points.
+  - interval: 10s
+    # The path of a file which SHOULD contain a team's identifier.
+    path: "/root/flag.txt"
+    # The award is granted if a team's identifier lays in the flag file.
+    award:
+      # The name of the award.
+      name: King of the Hill
+      # The award's description (optional).
+      description: |
+        You have been managing the root account for quite some time, impressive!
+        Don't get too comfortable... Keep on moving laterally and threngthening your foothold.
+      # The award's value.
+      # This can also be a negative number for canary files or fun, just remember that teams could sabotage each other.
+      value: 100
+      # A random category name.
+      category: King of the Hill
+      # An icon to use on the UI (optional).
+      icon: crown
