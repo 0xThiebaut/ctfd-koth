@@ -10,5 +10,4 @@ It will get the contents of the flag-file and award the owning user with a preco
 ## Disclaimer
 
 This is a *proof-of-concept*.
-Lots of stuff could be done better, hacks are being used to communicate with CTFd as they haven't implemented API keys as far as I know.
-Use at your own risk and shame&hellip;
+Lots of stuff could be done better, use at your own risk and shame&hellip;

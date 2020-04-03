@@ -6,9 +6,7 @@ import (
 	"errors"
 	"github.com/0xThiebaut/ctfd-koth/conf"
 	"github.com/0xThiebaut/ctfd-koth/logger"
-	"golang.org/x/net/publicsuffix"
 	"net/http"
-	"net/http/cookiejar"
 	"net/url"
 	"os"
 	"strconv"
@@ -49,23 +47,7 @@ func (m *Monitor) Start() error {
 	}
 	u := api.ResolveReference(endpoint)
 
-	// Create a client with cookie capabilities
-	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
-	if err != nil {
-		return err
-	}
-	client := http.Client{Jar: jar}
-	// Register the session cookie
-	client.Jar.SetCookies(u, []*http.Cookie{
-		{
-			Name:    "session",
-			Value:   m.api.Session,
-			Path:    u.Path,
-			Domain:  u.Host,
-			Expires: time.Now().Add(time.Hour * 48),
-		},
-	})
-
+	client := http.Client{}
 	// Initiate the state
 	m.closer = make(chan interface{})
 	m.ticker = time.NewTicker(m.Flag.Interval)
@@ -111,7 +93,7 @@ func (m *Monitor) Start() error {
 				// Define some required headers
 				r.Header.Add("Content-Type", "application/json")
 				r.Header.Add("Accept", "application/json")
-				r.Header.Add("CSRF-Token", m.api.CSRF)
+				r.Header.Add("Authorization", "Bearer " + m.api.Token)
 				// Execute the request
 				resp, err := client.Do(r)
 				if err != nil {

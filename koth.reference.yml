@@ -1,9 +1,6 @@
 api:
-  # The session's value can be found in your cookies once you are logged in on CTFd.
-  session: "12345678-1234-1234-1234-1234567890ab.1234567890a-1234567890abcde"
-  # The CSRF can be fond in the "CSRF-Token" of send headers to the API.
-  # TODO: This is why we really need API tokens
-  csrf: "1234567890abcdef1234567890abcdef1234567890abcdef12345678890abcde"
+  # A valid access token.
+  token: "a0bc5796126f3709ea4285eaec943027f57389eb536094e6ca53d5da75255258"
   # The URL points to your CTFd API endpoint.
   url: "https://foobar.ctfd.io/api/v1/"
 flags:

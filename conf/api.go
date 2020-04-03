@@ -6,22 +6,16 @@ import (
 )
 
 // API contains the required data to contact the CTFd API endpoints.
-// TODO: CTFd should support API tokens as the current approach is a hack.
 type API struct {
-	Session string `yaml:"session"`
-	CSRF    string `yaml:"csrf"`
+	Token  	string `yaml:"token"`
 	URL     string `yaml:"url"`
 }
 
 // Check if the API state seems credible.
 func (a *API) Check() error {
 	// The API requires at least a session token...
-	if len(a.Session) == 0 {
-		return errors.New("missing API session")
-	}
-	// ...a CSRF token...
-	if len(a.CSRF) == 0 {
-		return errors.New("missing API CSRF token")
+	if len(a.Token) == 0 {
+		return errors.New("missing API token")
 	}
 	// ...and a valid URL
 	if len(a.URL) == 0 {
