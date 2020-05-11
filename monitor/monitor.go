@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/0xThiebaut/ctfd-koth/conf"
 	"github.com/0xThiebaut/ctfd-koth/logger"
+	"golang.org/x/text/encoding/unicode"
 	"net/http"
 	"net/url"
 	"os"
@@ -69,9 +71,9 @@ func (m *Monitor) Start() error {
 					logger.Warn.Println(err)
 					continue
 				}
-				line := buf.String()
+				c := buf.Bytes()
 				// Parse the user identifier
-				user, err := strconv.Atoi(strings.TrimSpace(line))
+				user, err := parse(c)
 				if err != nil {
 					logger.Warn.Println(err)
 					continue
@@ -131,4 +133,27 @@ func (m *Monitor) Close() error {
 	// Send a closure signal
 	close(m.closer)
 	return nil
+}
+
+func parse(b []byte) (int, error) {
+	// Try the default
+	s := string(b)
+	s = strings.TrimSpace(s)
+	if i, err := strconv.Atoi(s); err == nil {
+		return i, nil
+	}
+	// Try other encodings
+	for _, e := range unicode.All {
+		d := e.NewDecoder()
+		o, err := d.Bytes(b)
+		if err != nil {
+			continue
+		}
+		s = string(o)
+		s = strings.TrimSpace(s)
+		if i, err := strconv.Atoi(s); err == nil {
+			return i, nil
+		}
+	}
+	return -1, fmt.Errorf("unable to parse %#v; either the file doesn't contain a number or the encoding is not any of ASCII, UTF8, UTF16BE, UTF16BE with BOM, UTF16LE", b)
 }
